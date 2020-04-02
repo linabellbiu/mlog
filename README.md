@@ -1,5 +1,7 @@
 # mlog
 
+#### 一个超轻量的日志输出的包
+
 - install package
 ```
  go get github.com/wangxudong123/mlog
