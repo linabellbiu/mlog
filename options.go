@@ -13,7 +13,7 @@ func (m *minLog) Warning(sign string, err error, msg string) {
 	} else {
 		error = ""
 	}
-	m.logLv.Warning.Output(2, "\n[Type]:"+sign+"\n[Error]:"+error+"\n[Msg]:"+msg)
+	m.logLv.Warning.Output(2, "\n	Type:"+sign+"\n	Error:"+error+"\n	Msg:"+msg)
 }
 
 func (m *minLog) Error(sign string, err error) {
@@ -23,6 +23,6 @@ func (m *minLog) Error(sign string, err error) {
 	} else {
 		error = ""
 	}
-	m.logLv.Error.Output(2, "\n[Type]:"+sign+"\n[Error]:"+error)
+	m.logLv.Error.Output(2, "\nType:"+sign+"\nError:"+error)
 	os.Exit(1)
 }
