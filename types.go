@@ -4,7 +4,7 @@ import "log"
 
 type minLog struct {
 	*logLv
-
+	save saveTime
 	path string
 }
 

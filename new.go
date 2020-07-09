@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"time"
 )
 
 const infoFileName = "info.log"
@@ -14,10 +15,29 @@ var m = &minLog{
 	logLv: nil,
 }
 
+type saveTime int32
+
+const (
+	SaveDay   saveTime = 0
+	SaveWeek  saveTime = 1
+	SaveMonth saveTime = 2
+	SaveYear  saveTime = 3
+)
+
+const (
+	//LOGPATH  LOGPATH/time.Now().Format(FORMAT)/*.log
+	LOGPATH = "/"
+	//FORMAT .
+	FORMAT = "20060102"
+)
+
+var path = LOGPATH + time.Now().Format(FORMAT) + "/"
+
 func New(filePath string) *minLog {
-	m.parse(filePath)
+	//m.save = save
+	m.parse(filePath + path)
 	if err := cDir(m.path); err != nil {
-		panic("创建目录" + m.path + "失败")
+		panic("创建目录" + m.path + "失败:" + err.Error())
 	}
 	m.logLv = m.newLogLv()
 	return m
