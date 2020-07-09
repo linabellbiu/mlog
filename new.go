@@ -1,9 +1,6 @@
 package mlog
 
 import (
-	"io"
-	"log"
-	"os"
 	"time"
 )
 
@@ -31,30 +28,21 @@ const (
 	FORMAT = "20060102"
 )
 
-var path = LOGPATH + time.Now().Format(FORMAT) + "/"
-
 func New(filePath string) *minLog {
-	//m.save = save
-	m.parse(filePath + path)
-	if err := cDir(m.path); err != nil {
-		panic("创建目录" + m.path + "失败:" + err.Error())
+	m.path = filePath
+	m.logLv = &logLv{
+		Info:    &config{On: true},
+		Warning: &config{On: true},
+		Error:   &config{On: true},
 	}
-	m.logLv = m.newLogLv()
 	return m
 }
 
-func (m *minLog) newLogLv() *logLv {
-	return &logLv{
-		Info:    log.New(io.MultiWriter(os.Stderr, cFile(m.path+infoFileName)), "[INFO]: ", log.Ldate|log.Ltime|log.Lshortfile),
-		Warning: log.New(io.MultiWriter(os.Stderr, cFile(m.path+warningFileName)), "[WARNING]: ", log.Ldate|log.Ltime|log.Llongfile),
-		Error:   log.New(io.MultiWriter(os.Stderr, cFile(m.path+errorFileName)), "[ERROR]: ", log.Ldate|log.Ltime|log.Lmicroseconds|log.Llongfile),
-	}
-}
-
-func (m *minLog) parse(path string) {
-	m.path = path
+func (m *minLog) parse() string {
+	path := m.path + LOGPATH + time.Now().Format(FORMAT) + "/"
 	l := len(path)
 	if string(path[l-1]) != "/" {
-		m.path = path + "/"
+		path = path + "/"
 	}
+	return path
 }

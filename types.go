@@ -1,7 +1,5 @@
 package mlog
 
-import "log"
-
 type minLog struct {
 	*logLv
 	save saveTime
@@ -9,7 +7,11 @@ type minLog struct {
 }
 
 type logLv struct {
-	Info    *log.Logger
-	Warning *log.Logger
-	Error   *log.Logger
+	Info    *config
+	Warning *config
+	Error   *config
+}
+
+type config struct {
+	On bool
 }

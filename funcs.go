@@ -13,8 +13,9 @@ func cFile(filename string) *os.File {
 	return file
 }
 
-func cDir(path string) error {
-	return os.MkdirAll(path, os.ModePerm)
+func cDir() (string, error) {
+	path := m.parse()
+	return path, os.MkdirAll(path, os.ModePerm)
 }
 
 func cPackPage(path string) bool {
