@@ -5,14 +5,6 @@ import (
 	"time"
 )
 
-func cFile(filename string) *os.File {
-	file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		panic("打开" + filename + "日志文件失败:" + err.Error())
-	}
-	return file
-}
-
 func cDir() (string, error) {
 	path := m.parse()
 	return path, os.MkdirAll(path, os.ModePerm)
