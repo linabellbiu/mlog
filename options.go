@@ -19,7 +19,7 @@ func (m *minLog) Info(msg string) {
 			panic("打开" + filename + "日志文件失败:" + err.Error())
 		}
 		defer file.Close()
-		log.New(io.MultiWriter(os.Stdout, file), "[INFO]: ", log.Ldate|log.Ltime|log.Lshortfile).Output(2, msg)
+		log.New(io.MultiWriter(os.Stdout, file), "[INFO]: ", log.Ldate|log.Lmicroseconds|log.Lshortfile).Output(2, msg)
 	}
 }
 
