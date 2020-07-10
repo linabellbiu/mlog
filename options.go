@@ -1,7 +1,6 @@
 package mlog
 
 import (
-	"fmt"
 	"github.com/wangxudong123/assist"
 	"io"
 	"io/ioutil"
@@ -74,7 +73,6 @@ func (m *minLog) delOutTime(path string) {
 		if m.save > 0 {
 			if files, err := ioutil.ReadDir(path); err == nil {
 				for _, f := range files {
-					fmt.Println(path)
 					reg := regexp.MustCompile(`^[0-9]+$`)
 					result := reg.FindAllString(f.Name(), -1)
 					if len(result) == 0 {
@@ -83,8 +81,7 @@ func (m *minLog) delOutTime(path string) {
 					fileNameT := assist.StringToInt64(f.Name())
 					nowT := assist.StringToInt64(assist.UnixToTimeFormats(nowT, "20060102"))
 					if nowT-fileNameT > int64(m.save) {
-						fmt.Println(path + f.Name())
-						_ = os.RemoveAll(path+ f.Name())
+						_ = os.RemoveAll(path + f.Name())
 					}
 				}
 			}
