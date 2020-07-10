@@ -21,6 +21,10 @@ const (
 )
 
 func New(filePath string) *minLog {
+	if filePath == "" {
+		filePath = "./"
+	}
+
 	m.logLv = &logLv{
 		Info:    &config{On: true},
 		Warning: &config{On: true},
