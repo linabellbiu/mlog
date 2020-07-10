@@ -2,7 +2,7 @@ package mlog
 
 type minLog struct {
 	*logLv
-	save saveTime
+	save int
 	path string
 }
 

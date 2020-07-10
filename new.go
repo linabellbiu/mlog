@@ -1,6 +1,7 @@
 package mlog
 
 import (
+	"os"
 	"time"
 )
 
@@ -12,15 +13,6 @@ var m = &minLog{
 	logLv: nil,
 }
 
-type saveTime int32
-
-const (
-	SaveDay   saveTime = 0
-	SaveWeek  saveTime = 1
-	SaveMonth saveTime = 2
-	SaveYear  saveTime = 3
-)
-
 const (
 	//LOGPATH  LOGPATH/time.Now().Format(FORMAT)/*.log
 	LOGPATH = "/"
@@ -29,20 +21,26 @@ const (
 )
 
 func New(filePath string) *minLog {
-	m.path = filePath
 	m.logLv = &logLv{
 		Info:    &config{On: true},
 		Warning: &config{On: true},
 		Error:   &config{On: true},
 	}
+
+	if err := m.parse(filePath); err != nil {
+		panic("创建目录" + m.path + "失败:" + err.Error())
+	}
+
+	go m.delOutTime(filePath)
+
 	return m
 }
 
-func (m *minLog) parse() string {
-	path := m.path + LOGPATH + time.Now().Format(FORMAT) + "/"
-	l := len(path)
-	if string(path[l-1]) != "/" {
-		path = path + "/"
+func (m *minLog) parse(path string) error {
+	m.path = path + LOGPATH + time.Now().Format(FORMAT) + "/"
+	l := len(m.path)
+	if string(m.path[l-1]) != "/" {
+		m.path = m.path + "/"
 	}
-	return path
+	return os.MkdirAll(m.path, os.ModePerm)
 }
