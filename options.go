@@ -13,6 +13,7 @@ import (
 func (m *minLog) Info(msg string) {
 
 	if m.logLv.Info.On {
+		_ = os.MkdirAll(m.path, os.ModePerm)
 		filename := m.path + infoFileName
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
@@ -31,6 +32,7 @@ func (m *minLog) Warning(sign string, err error, msg string) {
 		e = ""
 	}
 	if m.logLv.Warning.On {
+		_ = os.MkdirAll(m.path, os.ModePerm)
 		filename := m.path + warningFileName
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
@@ -50,6 +52,7 @@ func (m *minLog) Error(sign string, err error) {
 		e = ""
 	}
 	if m.logLv.Error.On {
+		_ = os.MkdirAll(m.path, os.ModePerm)
 		filename := m.path + errorFileName
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
