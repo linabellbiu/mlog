@@ -13,8 +13,11 @@ import (
 func (m *minLog) Info(msg string) {
 
 	if m.logLv.Info.On {
-		_ = os.MkdirAll(m.path, os.ModePerm)
-		filename := m.path + infoFileName
+		filename, err := m.parse()
+		if err != nil {
+			panic("创建" + filename + "日志文件失败:" + err.Error())
+		}
+		filename = filename + infoFileName
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
 			panic("打开" + filename + "日志文件失败:" + err.Error())
@@ -32,8 +35,11 @@ func (m *minLog) Warning(sign string, err error, msg string) {
 		e = ""
 	}
 	if m.logLv.Warning.On {
-		_ = os.MkdirAll(m.path, os.ModePerm)
-		filename := m.path + warningFileName
+		filename, err := m.parse()
+		if err != nil {
+			panic("创建" + filename + "日志文件失败:" + err.Error())
+		}
+		filename = filename + warningFileName
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
 			panic("打开" + filename + "日志文件失败:" + err.Error())
@@ -52,8 +58,11 @@ func (m *minLog) Error(sign string, err error) {
 		e = ""
 	}
 	if m.logLv.Error.On {
-		_ = os.MkdirAll(m.path, os.ModePerm)
-		filename := m.path + errorFileName
+		filename, err := m.parse()
+		if err != nil {
+			panic("创建" + filename + "日志文件失败:" + err.Error())
+		}
+		filename = filename + errorFileName
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
 			panic("打开" + filename + "日志文件失败:" + err.Error())

@@ -26,4 +26,3 @@ func main(){
 
 }
 ```
-test

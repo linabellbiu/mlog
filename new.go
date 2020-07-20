@@ -25,26 +25,30 @@ func New(filePath string) *minLog {
 		filePath = "./"
 	}
 
+	m.path = filePath
+
 	m.logLv = &logLv{
 		Info:    &config{On: true},
 		Warning: &config{On: true},
 		Error:   &config{On: true},
 	}
 
-	if err := m.parse(filePath); err != nil {
-		panic("创建目录" + m.path + "失败:" + err.Error())
-	}
+	//if err := m.parse(filePath); err != nil {
+	//	panic("创建目录" + m.path + "失败:" + err.Error())
+	//}
 
 	go m.delOutTime(filePath)
 
 	return m
 }
 
-func (m *minLog) parse(path string) error {
-	m.path = path + LOGPATH + time.Now().Format(FORMAT) + "/"
+func (m *minLog) parse() (string, error) {
+	var path string
 	l := len(m.path)
 	if string(m.path[l-1]) != "/" {
-		m.path = m.path + "/"
+		path = m.path + "/"
 	}
-	return os.MkdirAll(m.path, os.ModePerm)
+	path = path + LOGPATH + time.Now().Format(FORMAT) + "/"
+
+	return path, os.MkdirAll(path, os.ModePerm)
 }
