@@ -11,8 +11,10 @@ import (
 )
 
 func (m *minLog) Info(msg string) {
-
-	if m.logLv.Info.On {
+	m.logLv.Info.L.RLock()
+	ok := m.logLv.Info.On
+	m.logLv.Info.L.RUnlock()
+	if ok {
 		filename, err := m.parse()
 		if err != nil {
 			panic("创建" + filename + "日志文件失败:" + err.Error())
@@ -34,7 +36,10 @@ func (m *minLog) Warning(sign string, err error, msg string) {
 	} else {
 		e = ""
 	}
-	if m.logLv.Warning.On {
+	m.logLv.Warning.L.RLock()
+	ok := m.logLv.Warning.On
+	m.logLv.Warning.L.RUnlock()
+	if ok {
 		filename, err := m.parse()
 		if err != nil {
 			panic("创建" + filename + "日志文件失败:" + err.Error())
@@ -57,7 +62,10 @@ func (m *minLog) Error(sign string, err error) {
 	} else {
 		e = ""
 	}
-	if m.logLv.Error.On {
+	m.logLv.Error.L.RLock()
+	ok := m.logLv.Error.On
+	m.logLv.Error.L.RUnlock()
+	if ok {
 		filename, err := m.parse()
 		if err != nil {
 			panic("创建" + filename + "日志文件失败:" + err.Error())
@@ -103,15 +111,21 @@ func (m *minLog) delOutTime(path string) {
 }
 
 func (m *minLog) SetInfoOutPut(status bool) {
-	m.logLv.Info = &config{On: status}
+	m.logLv.Info.L.Lock()
+	m.logLv.Info.On = status
+	m.logLv.Info.L.Unlock()
 }
 
 func (m *minLog) SetWarningOutPut(status bool) {
-	m.logLv.Warning = &config{On: status}
+	m.logLv.Warning.L.Lock()
+	m.logLv.Warning.On = status
+	m.logLv.Warning.L.Unlock()
 }
 
 func (m *minLog) SetErrorOutPut(status bool) {
-	m.logLv.Error = &config{On: status}
+	m.logLv.Error.L.Lock()
+	m.logLv.Error.On = status
+	m.logLv.Error.L.Unlock()
 }
 
 func (m *minLog) Save(save int) {

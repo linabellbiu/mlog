@@ -2,6 +2,7 @@ package mlog
 
 import (
 	"os"
+	"sync"
 	"time"
 )
 
@@ -28,9 +29,9 @@ func New(filePath string) *minLog {
 	m.path = filePath
 
 	m.logLv = &logLv{
-		Info:    &config{On: true},
-		Warning: &config{On: true},
-		Error:   &config{On: true},
+		Info:    &config{On: true, L: &sync.RWMutex{}},
+		Warning: &config{On: true, L: &sync.RWMutex{}},
+		Error:   &config{On: true, L: &sync.RWMutex{}},
 	}
 
 	//if err := m.parse(filePath); err != nil {

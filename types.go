@@ -1,5 +1,7 @@
 package mlog
 
+import "sync"
+
 type minLog struct {
 	*logLv
 	save int
@@ -14,4 +16,5 @@ type logLv struct {
 
 type config struct {
 	On bool
+	L  *sync.RWMutex
 }
