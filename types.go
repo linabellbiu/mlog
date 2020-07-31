@@ -2,7 +2,7 @@ package mlog
 
 import "sync"
 
-type minLog struct {
+type MinLog struct {
 	*logLv
 	save int
 	path string

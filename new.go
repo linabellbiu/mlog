@@ -10,7 +10,7 @@ const infoFileName = "info.log"
 const errorFileName = "error.log"
 const warningFileName = "warning.log"
 
-var m = &minLog{
+var m = &MinLog{
 	logLv: nil,
 }
 
@@ -21,7 +21,7 @@ const (
 	FORMAT = "20060102"
 )
 
-func New(filePath string) *minLog {
+func New(filePath string) *MinLog {
 	if filePath == "" {
 		filePath = "./"
 	}
@@ -43,13 +43,12 @@ func New(filePath string) *minLog {
 	return m
 }
 
-func (m *minLog) parse() (string, error) {
+func (m *MinLog) parse() (string, error) {
 	var path string
 	l := len(m.path)
 	if string(m.path[l-1]) != "/" {
 		path = m.path + "/"
 	}
 	path = path + LOGPATH + time.Now().Format(FORMAT) + "/"
-
 	return path, os.MkdirAll(path, os.ModePerm)
 }

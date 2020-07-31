@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func (m *minLog) Info(msg string) {
+func (m *MinLog) Info(msg string) {
 	m.logLv.Info.L.RLock()
 	ok := m.logLv.Info.On
 	m.logLv.Info.L.RUnlock()
@@ -29,7 +29,7 @@ func (m *minLog) Info(msg string) {
 	}
 }
 
-func (m *minLog) Warning(sign string, err error, msg string) {
+func (m *MinLog) Warning(sign string, err error, msg string) {
 	var e string
 	if err != nil {
 		e = err.Error()
@@ -55,7 +55,7 @@ func (m *minLog) Warning(sign string, err error, msg string) {
 	}
 }
 
-func (m *minLog) Error(sign string, err error) {
+func (m *MinLog) Error(sign string, err error) {
 	var e string
 	if err != nil {
 		e = err.Error()
@@ -82,7 +82,7 @@ func (m *minLog) Error(sign string, err error) {
 	}
 }
 
-func (m *minLog) delOutTime(path string) {
+func (m *MinLog) delOutTime(path string) {
 	l := len(path)
 	if string(path[l-1]) != "/" {
 		path = path + "/"
@@ -90,7 +90,7 @@ func (m *minLog) delOutTime(path string) {
 	t := time.NewTicker(2 * time.Second)
 	nowT := time.Now().Unix()
 	for {
-		if m.save > 0 {
+		if m.save >= 1 {
 			if files, err := ioutil.ReadDir(path); err == nil {
 				for _, f := range files {
 					reg := regexp.MustCompile(`^[0-9]+$`)
@@ -100,7 +100,7 @@ func (m *minLog) delOutTime(path string) {
 					}
 					fileNameT := assist.StringToInt64(f.Name())
 					nowT := assist.StringToInt64(assist.UnixToTimeFormats(nowT, "20060102"))
-					if nowT-fileNameT > int64(m.save) {
+					if nowT-fileNameT > int64(m.save-1) {
 						_ = os.RemoveAll(path + f.Name())
 					}
 				}
@@ -110,24 +110,24 @@ func (m *minLog) delOutTime(path string) {
 	}
 }
 
-func (m *minLog) SetInfoOutPut(status bool) {
+func (m *MinLog) SetInfoOutPut(status bool) {
 	m.logLv.Info.L.Lock()
 	m.logLv.Info.On = status
 	m.logLv.Info.L.Unlock()
 }
 
-func (m *minLog) SetWarningOutPut(status bool) {
+func (m *MinLog) SetWarningOutPut(status bool) {
 	m.logLv.Warning.L.Lock()
 	m.logLv.Warning.On = status
 	m.logLv.Warning.L.Unlock()
 }
 
-func (m *minLog) SetErrorOutPut(status bool) {
+func (m *MinLog) SetErrorOutPut(status bool) {
 	m.logLv.Error.L.Lock()
 	m.logLv.Error.On = status
 	m.logLv.Error.L.Unlock()
 }
 
-func (m *minLog) Save(save int) {
+func (m *MinLog) Save(save int) {
 	m.save = save
 }
