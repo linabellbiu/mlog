@@ -6,6 +6,7 @@ type MinLog struct {
 	*logLv
 	save int
 	path string
+	l    *sync.RWMutex
 }
 
 type logLv struct {

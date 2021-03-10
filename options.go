@@ -90,7 +90,10 @@ func (m *MinLog) delOutTime(path string) {
 	t := time.NewTicker(2 * time.Second)
 	nowT := time.Now().Unix()
 	for {
-		if m.save >= 1 {
+		m.l.RLock()
+		save := m.save
+		m.l.RUnlock()
+		if save >= 1 {
 			if files, err := ioutil.ReadDir(path); err == nil {
 				for _, f := range files {
 					reg := regexp.MustCompile(`^[0-9]+$`)
@@ -100,7 +103,7 @@ func (m *MinLog) delOutTime(path string) {
 					}
 					fileNameT := assist.StringToInt64(f.Name())
 					nowT := assist.StringToInt64(assist.UnixToTimeFormats(nowT, "20060102"))
-					if nowT-fileNameT > int64(m.save-1) {
+					if nowT-fileNameT > int64(save-1) {
 						_ = os.RemoveAll(path + f.Name())
 					}
 				}
@@ -128,6 +131,9 @@ func (m *MinLog) SetErrorOutPut(status bool) {
 	m.logLv.Error.L.Unlock()
 }
 
+//保存几天
 func (m *MinLog) Save(save int) {
+	m.l.Lock()
 	m.save = save
+	m.l.Unlock()
 }
